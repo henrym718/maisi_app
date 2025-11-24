@@ -15,14 +15,12 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { signinSchema } from "@/modules/auth/schemas";
 import Link from "next/link";
-import { signInCredentials } from "../../services";
 import { useState } from "react";
 import { OctagonAlertIcon } from "lucide-react";
 import { Alert, AlertTitle } from "@/components/ui/alert";
-import { useRouter } from "next/navigation";
+import { signInAndSendEmail } from "../../actions";
 
 export default function SignInForm() {
-  const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
@@ -32,11 +30,11 @@ export default function SignInForm() {
   });
 
   const onSubmit = async (data: z.infer<typeof signinSchema>) => {
+    const { email, password } = data;
     try {
       setErrorMessage(null);
       setLoading(true);
-      await signInCredentials(data.email, data.password);
-      router.push("/");
+      await signInAndSendEmail(email, password);
     } catch (error) {
       setErrorMessage("Error al iniciar sesión");
     } finally {
@@ -45,7 +43,7 @@ export default function SignInForm() {
   };
 
   return (
-    <div className="space-y-6 w-full">
+    <div className="space-y-6">
       {/* Form */}
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
@@ -54,7 +52,7 @@ export default function SignInForm() {
             name="email"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="text-gray-700">
+                <FormLabel className="text-gray-500">
                   Correo electrónico
                 </FormLabel>
                 <FormControl>
@@ -74,7 +72,7 @@ export default function SignInForm() {
             name="password"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="text-gray-700">Contraseña</FormLabel>
+                <FormLabel className="text-gray-500">Contraseña</FormLabel>
                 <FormControl>
                   <Input
                     type="password"
@@ -87,6 +85,16 @@ export default function SignInForm() {
               </FormItem>
             )}
           />
+          {/* Boton de olvidaste tu contraseña */}
+
+          <div className="text-xs mt-[-20px]">
+            <Link
+              href="/forgot-password"
+              className="font-medium text-muted-foreground hover:text-primary underline"
+            >
+              ¿Olvidaste tu contraseña?
+            </Link>
+          </div>
 
           {!!errorMessage && (
             <Alert className="bg-destructive/10 border-none">
@@ -95,35 +103,12 @@ export default function SignInForm() {
             </Alert>
           )}
 
-          {/* Boton de olvidaste tu contraseña */}
-          <div className="flex items-center justify-end">
-            <div className="text-sm">
-              <Link
-                href="/forgot-password"
-                className="font-medium text-indigo-600 hover:text-indigo-500"
-              >
-                ¿Olvidaste tu contraseña?
-              </Link>
-            </div>
-          </div>
-
           {/* Boton de iniciar sesión */}
-          <Button className="w-full" type="submit">
+          <Button className="w-full mt-2 h-10" type="submit">
             {loading ? "Cargando..." : "Iniciar sesión"}
           </Button>
         </form>
       </Form>
-
-      {/* Enlace para ir al registro */}
-      <div className="text-center text-sm">
-        <span className="text-gray-500">¿Aún no tienes una cuenta? </span>
-        <Link
-          href="/sign-up"
-          className="font-medium text-indigo-600 hover:text-indigo-500"
-        >
-          Regístrate
-        </Link>
-      </div>
     </div>
   );
 }
