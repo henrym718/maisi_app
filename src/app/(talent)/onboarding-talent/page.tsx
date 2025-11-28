@@ -38,8 +38,8 @@ const TalentOnboardingIntro = () => {
               Todo lo que necesitas para conectar con clientes y crecer.
             </h1>
             <p className="text-lg text-gray-600">
-              Únete a nuestra plataforma, obtén visibilidad ante miles de
-              clientes y gestiona tu carrera profesional sin intermediarios.
+              Con tu cuenta en Talento tendrás visibilidad ante miles de
+              clientes y podrás impulsar tu carrera sin intermediarios.
             </p>
 
             {/* PASOS: El flujo de trabajo interno */}

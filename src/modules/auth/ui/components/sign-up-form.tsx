@@ -2,10 +2,10 @@
 
 import {
   Form,
-  FormControl,
   FormField,
   FormItem,
   FormLabel,
+  FormControl,
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
@@ -13,30 +13,33 @@ import { Button } from "@/components/ui/button";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { signinSchema } from "@/modules/auth/schemas";
 import Link from "next/link";
 import { useState } from "react";
 import { OctagonAlertIcon } from "lucide-react";
 import { Alert, AlertTitle } from "@/components/ui/alert";
-import { signInWithPassword } from "../../actions";
+import { signupWithPassword } from "../../actions";
+import { signupSchema } from "../../schemas";
 
-export default function SignInForm() {
+export default function SignupForm() {
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
-  const form = useForm<z.infer<typeof signinSchema>>({
-    resolver: zodResolver(signinSchema),
-    defaultValues: { email: "", password: "" },
+  const form = useForm<z.infer<typeof signupSchema>>({
+    resolver: zodResolver(signupSchema),
+    defaultValues: {
+      email: "",
+      password: "",
+      name: "",
+    },
   });
 
-  const onSubmit = async (data: z.infer<typeof signinSchema>) => {
-    const { email, password } = data;
+  const onSubmit = async (data: z.infer<typeof signupSchema>) => {
     try {
-      setErrorMessage(null);
       setLoading(true);
-      await signInWithPassword(email, password);
+      await signupWithPassword(data.email, data.password);
     } catch (error) {
-      setErrorMessage("Error al iniciar sesión");
+      console.log(error);
+      setErrorMessage("Algo salio mal");
     } finally {
       setLoading(false);
     }
@@ -47,6 +50,19 @@ export default function SignInForm() {
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
         <FormField
           control={form.control}
+          name="name"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel className="text-gray-500">Nombre</FormLabel>
+              <FormControl>
+                <Input placeholder="Juan Perez" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
           name="email"
           render={({ field }) => (
             <FormItem>
@@ -54,12 +70,7 @@ export default function SignInForm() {
                 Correo electrónico
               </FormLabel>
               <FormControl>
-                <Input
-                  type="email"
-                  autoComplete="email"
-                  placeholder="tu@ejemplo.com"
-                  {...field}
-                />
+                <Input placeholder="tu@ejemplo.com" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -72,26 +83,12 @@ export default function SignInForm() {
             <FormItem>
               <FormLabel className="text-gray-500">Contraseña</FormLabel>
               <FormControl>
-                <Input
-                  type="password"
-                  autoComplete="current-password"
-                  placeholder="••••••••"
-                  {...field}
-                />
+                <Input placeholder="••••••••" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
           )}
         />
-
-        <div className="text-xs mt-[-20px]">
-          <Link
-            href="/forgot-password"
-            className="font-medium text-muted-foreground hover:text-primary underline"
-          >
-            ¿Olvidaste tu contraseña?
-          </Link>
-        </div>
 
         {!!errorMessage && (
           <Alert className="bg-destructive/10 border-none">
@@ -101,7 +98,7 @@ export default function SignInForm() {
         )}
 
         <Button
-          className="w-full mt-2 h-10 border-2 border-primary-foreground"
+          className="w-full mt-2 h-10 border-2 border-black"
           type="submit"
         >
           {loading ? "Cargando..." : "Continuar"}

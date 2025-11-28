@@ -21,8 +21,8 @@ export async function sendWelcomeEmail(email: string) {
   if (error) throw error;
 }
 
-export async function signInAndSendEmail(email: string, password: string) {
-  await signInWithPassword(email, password);
-  await sendWelcomeEmail(email);
-  redirect("/");
+export async function signupWithPassword(email: string, password: string) {
+  const supabase = await createClient();
+  const { error } = await supabase.auth.signUp({ email, password });
+  if (error) throw error;
 }
