@@ -7,49 +7,60 @@ import {
   FormLabel,
   FormControl,
   FormMessage,
+  FormDescription,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import Link from "next/link";
-import { useState } from "react";
-import { OctagonAlertIcon } from "lucide-react";
+import { Dispatch, SetStateAction, useState } from "react";
+import { OctagonAlertIcon, ArrowRight } from "lucide-react";
 import { Alert, AlertTitle } from "@/components/ui/alert";
-import { signupWithPassword } from "../../actions";
 import { signupSchema } from "../../schemas";
+import { signupWithPassword } from "../../actions/signup-with-password";
 
-export default function SignupForm() {
+interface Props {
+  role: "client" | "talent";
+  setStep: Dispatch<SetStateAction<"REGISTER" | "VERIFY">>;
+}
+
+export default function SignupForm({ role, setStep }: Props) {
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
-  const form = useForm<z.infer<typeof signupSchema>>({
+  const formRegister = useForm<z.infer<typeof signupSchema>>({
     resolver: zodResolver(signupSchema),
-    defaultValues: {
-      email: "",
-      password: "",
-      name: "",
-    },
+    defaultValues: { email: "", password: "", name: "" },
   });
 
-  const onSubmit = async (data: z.infer<typeof signupSchema>) => {
+  const onSignupSubmit = async (data: z.infer<typeof signupSchema>) => {
+    const { email, password, name } = data;
     try {
       setLoading(true);
-      await signupWithPassword(data.email, data.password);
-    } catch (error) {
-      console.log(error);
-      setErrorMessage("Algo salio mal");
+      setErrorMessage(null);
+      const response = await signupWithPassword(name, email, password, role);
+
+      if (response.success) {
+        setStep("VERIFY");
+      }
+
+      if (!response.success) {
+        setErrorMessage(response.error);
+      }
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+    <Form {...formRegister}>
+      <form
+        onSubmit={formRegister.handleSubmit(onSignupSubmit)}
+        className="space-y-4"
+      >
         <FormField
-          control={form.control}
+          control={formRegister.control}
           name="name"
           render={({ field }) => (
             <FormItem>
@@ -62,7 +73,7 @@ export default function SignupForm() {
           )}
         />
         <FormField
-          control={form.control}
+          control={formRegister.control}
           name="email"
           render={({ field }) => (
             <FormItem>
@@ -77,13 +88,13 @@ export default function SignupForm() {
           )}
         />
         <FormField
-          control={form.control}
+          control={formRegister.control}
           name="password"
           render={({ field }) => (
             <FormItem>
               <FormLabel className="text-gray-500">Contraseña</FormLabel>
               <FormControl>
-                <Input placeholder="••••••••" {...field} />
+                <Input placeholder="••••••••" type="password" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -93,15 +104,24 @@ export default function SignupForm() {
         {!!errorMessage && (
           <Alert className="bg-destructive/10 border-none">
             <OctagonAlertIcon className="size-4 !text-destructive" />
-            <AlertTitle>{errorMessage}</AlertTitle>
+            <AlertTitle className="text-destructive text-sm">
+              {errorMessage}
+            </AlertTitle>
           </Alert>
         )}
 
         <Button
           className="w-full mt-2 h-10 border-2 border-black"
           type="submit"
+          disabled={loading}
         >
-          {loading ? "Cargando..." : "Continuar"}
+          {loading ? (
+            "Enviando código..."
+          ) : (
+            <span className="flex items-center gap-2">
+              Continuar <ArrowRight className="size-4" />
+            </span>
+          )}
         </Button>
       </form>
     </Form>

@@ -18,7 +18,7 @@ import Link from "next/link";
 import { useState } from "react";
 import { OctagonAlertIcon } from "lucide-react";
 import { Alert, AlertTitle } from "@/components/ui/alert";
-import { signInWithPassword } from "../../actions";
+import { signInWithPassword } from "../../services";
 
 export default function SignInForm() {
   const [loading, setLoading] = useState(false);
