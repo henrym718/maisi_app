@@ -4,8 +4,8 @@ import { Resend } from "resend";
 import { createAdminClient } from "@/lib/supabase/client";
 import { EMAIL_FROM, Role } from "@/lib/constants";
 
-import { mapResendError } from "./mappers/mapResendError";
-import { mapSupabaseError } from "./mappers/mapSupabaseError";
+import { resendError } from "../../lib/errors/resendError";
+import { supabaseError } from "../../lib/errors/supabaseError";
 import { OTP_Template } from "./templates/verify-email";
 
 type Response =
@@ -30,7 +30,7 @@ export async function signupWithPassword(input: Payload): Promise<Response> {
 
   // ✅ Criterios de aceptación:
   // - Se genera un link de signup en Supabase
-  // - El usuario queda registrado con full_name y role en metadata
+  // - El usuario queda registrado con full_name y role en metadata pero no verificado
   // - Si falla, se retorna { success: false, error: <mensaje mapeado> }
   const authResult = await supabaseAdmin.auth.admin.generateLink({
     type: "signup",
@@ -44,7 +44,7 @@ export async function signupWithPassword(input: Payload): Promise<Response> {
   if (authResult.error) {
     return {
       success: false,
-      error: mapSupabaseError(authResult.error.message),
+      error: supabaseError(authResult.error.message),
     };
   }
 
@@ -62,7 +62,7 @@ export async function signupWithPassword(input: Payload): Promise<Response> {
   if (emailResult.error) {
     return {
       success: false,
-      error: mapResendError(emailResult.error.message),
+      error: resendError(emailResult.error.message),
     };
   }
 

@@ -32,20 +32,10 @@ interface Props {
   setStep: Dispatch<SetStateAction<"REGISTER" | "VERIFY">>;
 }
 
-/**
- * SignUpForm
- * Criterios de aceptación:
- * - Renderiza un formulario de registro con nombre, email y contraseña.
- * - Valida los campos usando Zod + react-hook-form.
- * - Al enviar:
- *    - Muestra estado "pending" mientras se procesa.
- *    - Si hay error, muestra alerta con mensaje claro.
- *    - Si éxito, avanza al paso "VERIFY".
- */
-
 export default function SignUpForm({ role, setStep }: Props) {
   // ✅ Criterios de aceptación:
-  // - Se inicializan estados para pending y error.
+  // - Maneja el estado de carga isPending.
+  // - Almacena y muestra mensajes de error provenientes del backend.
   const [isPending, setIsPending] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
@@ -82,8 +72,9 @@ export default function SignUpForm({ role, setStep }: Props) {
         setErrorMessage(result.error);
         return;
       }
+
       setStep("VERIFY");
-    } catch (error) {
+    } catch {
       setErrorMessage("Ha ocurrido un error al registrar");
     } finally {
       setIsPending(false);

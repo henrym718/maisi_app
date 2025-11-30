@@ -1,4 +1,4 @@
-export function mapSupabaseError(message: string): string {
+export function supabaseError(message: string): string {
   const normalized = message.toLowerCase();
 
   if (normalized.includes("already been registered")) {
