@@ -15,7 +15,7 @@ import { CheckCircle2, Mail, OctagonAlertIcon, RefreshCw } from "lucide-react";
 import { Dispatch, SetStateAction, useState } from "react";
 import { useForm } from "react-hook-form";
 import z from "zod";
-import { resendOtp, verifyOtp } from "../../services";
+import { resendOtp, verifyOtp } from "../../service";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 

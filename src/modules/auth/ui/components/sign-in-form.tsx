@@ -18,9 +18,11 @@ import Link from "next/link";
 import { useState } from "react";
 import { OctagonAlertIcon } from "lucide-react";
 import { Alert, AlertTitle } from "@/components/ui/alert";
-import { signInWithPassword } from "../../services";
+import { signInWithPassword } from "../../service";
+import { useRouter } from "next/navigation";
 
 export default function SignInForm() {
+  const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
@@ -34,7 +36,13 @@ export default function SignInForm() {
     try {
       setErrorMessage(null);
       setLoading(true);
-      await signInWithPassword(email, password);
+      const result = await signInWithPassword(email, password);
+
+      if (!result.success) {
+        setErrorMessage(result.error);
+        return;
+      }
+      router.push("/");
     } catch (error) {
       setErrorMessage("Error al iniciar sesión");
     } finally {
