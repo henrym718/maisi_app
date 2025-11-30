@@ -1,15 +1,12 @@
 import { Button } from "@/components/ui/button";
-import { Menubar } from "@/components/ui/menubar";
-import {
-  Sheet,
-  SheetContent,
-  SheetTitle,
-  SheetTrigger,
-} from "@/components/ui/sheet";
-import { LogIn, Search, UserCircle } from "lucide-react";
+import { LogIn } from "lucide-react";
 import Link from "next/link";
 
-export default function Layout({ children }: { children: React.ReactNode }) {
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
     <div className="flex flex-col min-h-screen antialiased">
       {/* HEADER: Sticky en la parte superior con efecto de vidrio */}
