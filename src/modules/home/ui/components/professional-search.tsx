@@ -2,7 +2,6 @@
 
 import { useState, useEffect, useRef } from "react";
 import { Search, ArrowRight, ChevronDown, MapPin } from "lucide-react";
-import { Card } from "@/components/ui/card";
 
 // --- DATA HARDCODEADA (Para pruebas) ---
 const PROFESIONES = [
@@ -35,16 +34,15 @@ const ProfessionalSearch = () => {
   // Cerrar dropdown si se hace clic fuera
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
+      const target = event.target as HTMLElement;
       if (
         wrapperRef.current &&
-        !wrapperRef.current.contains(event.target as Node)
+        target &&
+        !wrapperRef.current.contains(target)
       ) {
         setIsOpen(false);
-        // Aseguramos que el selector de modo también se cierre
-        if (
-          event.target instanceof Element &&
-          !event.target.closest("button")
-        ) {
+
+        if (!target.closest("button")) {
           // Evitar cerrar si se hizo clic en el botón del selector
           setShowModeSelector(false);
         }
@@ -81,21 +79,12 @@ const ProfessionalSearch = () => {
   return (
     <div className="w-full flex flex-col items-center justify-center">
       {/* Contenedor Principal (Estilo Card Flotante) */}
-      <Card
+      <div
         ref={wrapperRef}
         // Reducimos el padding de la Card de p-2 a p-1.5 para juntar
-        className="relative w-full bg-white rounded-xl border border-black/90 p-1.5 transition-all duration-300 focus-within:ring-1 focus-within:ring-black/20"
+        className="relative w-full rounded-xl border border-black/90 p-1.5 transition-all duration-300"
       >
-        {/* Reducimos el padding interior de px-4 pt-4 pb-2 a px-3 pt-3 pb-1 */}
         <div className="flex flex-col px-3 pt-3 pb-1">
-          {/* Label superior pequeño (opcional, para dar contexto) */}
-          {/* Reducimos el margin bottom de mb-1 a mb-0.5 */}
-          <span className="text-xs font-semibold text-gray-600 mb-0.5 ml-1 uppercase tracking-wider">
-            {mode === "keywords"
-              ? "Búsqueda Inteligente"
-              : "Directorio de Profesiones"}
-          </span>
-
           {/* INPUT GRANDE */}
           <textarea
             value={query}
@@ -110,14 +99,12 @@ const ProfessionalSearch = () => {
                 : "Elige una profesión o busca en la lista"
             }
             // Reducimos la altura de h-16 a h-12 (más compacto)
-            className="w-full text-lg font-medium text-gray-800 placeholder:text-gray-300 outline-none resize-none bg-transparent overflow-hidden h-12 pt-1"
+            className="w-full text-lg font-medium text-gray-900 placeholder:text-gray-400 outline-none resize-none bg-transparent overflow-hidden h-12 pt-1"
             rows={1}
           />
 
           {/* BARRA DE HERRAMIENTAS INFERIOR */}
           <div className="flex items-center justify-between mt-1">
-            {" "}
-            {/* Reducimos el margen superior */}
             {/* Selector de Modo (Estilo Pill) */}
             <div className="relative">
               <button
@@ -150,7 +137,7 @@ const ProfessionalSearch = () => {
                       <p className="font-medium text-gray-800">
                         Palabras Clave
                       </p>
-                      <p className="text-xs text-gray-400">
+                      <p className="text-xs text-gray-500">
                         Describe lo que necesitas
                       </p>
                     </div>
@@ -165,7 +152,7 @@ const ProfessionalSearch = () => {
                   >
                     <div>
                       <p className="font-medium text-gray-800">Profesión</p>
-                      <p className="text-xs text-gray-400">
+                      <p className="text-xs text-gray-500">
                         Lista de profesiones
                       </p>
                     </div>
@@ -248,7 +235,7 @@ const ProfessionalSearch = () => {
             </div>
           </div>
         )}
-      </Card>
+      </div>
     </div>
   );
 };
