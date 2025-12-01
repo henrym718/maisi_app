@@ -1,6 +1,6 @@
 "use client";
 
-import { Alert, AlertTitle } from "@/components/ui/alert";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import {
   Form,
   FormControl,
@@ -45,10 +45,14 @@ export default function VerifyOtpForm({ email, role, setStep }: Props) {
     try {
       setLoading(true);
       setErrorMessage(null);
-      await verifyOtp(email, data.code);
+      const response = await verifyOtp(email, data.code);
+      if (!response.success) {
+        setErrorMessage(response.error);
+        return;
+      }
       router.push(`/${role}/dashboard`);
-    } catch (error) {
-      setErrorMessage("El código es incorrecto o ha expirado.");
+    } catch (error: any) {
+      setErrorMessage(error.message);
     } finally {
       setLoading(false);
     }
@@ -59,14 +63,13 @@ export default function VerifyOtpForm({ email, role, setStep }: Props) {
       setResendLoading(true);
       setErrorMessage(null);
       setSuccessMessage(null);
-      await resendOtp(email);
-      setSuccessMessage("Código reenviado con éxito. Revisa tu bandeja.");
-    } catch (error) {
-      setErrorMessage(
-        error instanceof Error
-          ? error.message
-          : "No se pudo reenviar el código. Espera unos segundos."
-      );
+      const response = await resendOtp(email);
+      if (!response.success) {
+        setErrorMessage(response.error);
+        return;
+      }
+    } catch (error: any) {
+      setErrorMessage(error.message);
     } finally {
       setResendLoading(false);
     }
@@ -115,18 +118,18 @@ export default function VerifyOtpForm({ email, role, setStep }: Props) {
           {!!errorMessage && (
             <Alert className="bg-destructive/10 border-none">
               <OctagonAlertIcon className="size-4 !text-destructive" />
-              <AlertTitle className="text-destructive text-sm">
+              <AlertDescription className="text-destructive text-sm">
                 {errorMessage}
-              </AlertTitle>
+              </AlertDescription>
             </Alert>
           )}
 
           {!!successMessage && (
             <Alert className="bg-green-50 border-none">
               <CheckCircle2 className="size-4 text-green-600" />
-              <AlertTitle className="text-green-800 text-sm">
+              <AlertDescription className="text-green-800 text-sm">
                 {successMessage}
-              </AlertTitle>
+              </AlertDescription>
             </Alert>
           )}
 

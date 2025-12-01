@@ -1,9 +1,17 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
-import { Search, ArrowRight, ChevronDown, MapPin } from "lucide-react";
+// Importamos User y Wrench para representar profesiones y herramientas
+import {
+  Search,
+  ArrowRight,
+  ChevronDown,
+  MapPin,
+  User,
+  Wrench,
+} from "lucide-react";
 
-// --- DATA HARDCODEADA (Para pruebas) ---
+// --- DATA HARDCODEADA (ACTUALIZADA con más profesiones) ---
 const PROFESIONES = [
   { id: 1, name: "Pintor", icon: "🎨" },
   { id: 2, name: "Electricista", icon: "💡" },
@@ -11,6 +19,15 @@ const PROFESIONES = [
   { id: 4, name: "Jardinero", icon: "🌿" },
   { id: 5, name: "Instalador de Gypsum", icon: "🏗️" },
   { id: 6, name: "Carpintero", icon: "🪚" },
+  { id: 7, name: "Albañil", icon: "🧱" },
+  { id: 8, name: "Técnico de A/C", icon: "❄️" },
+  { id: 9, name: "Cerrajero", icon: "🔑" },
+  { id: 10, name: "Limpieza", icon: "🧼" },
+  { id: 11, name: "Diseñador web", icon: "💻" },
+  { id: 12, name: "Profesor particular", icon: "📚" },
+  { id: 13, name: "Fotógrafo", icon: "📸" },
+  { id: 14, name: "Mecánico", icon: "🚗" },
+  { id: 15, name: "Nutricionista", icon: "🍎" },
 ];
 
 const SUGERENCIAS_TAGS = [
@@ -41,9 +58,7 @@ const ProfessionalSearch = () => {
         !wrapperRef.current.contains(target)
       ) {
         setIsOpen(false);
-
         if (!target.closest("button")) {
-          // Evitar cerrar si se hizo clic en el botón del selector
           setShowModeSelector(false);
         }
       }
@@ -81,7 +96,6 @@ const ProfessionalSearch = () => {
       {/* Contenedor Principal (Estilo Card Flotante) */}
       <div
         ref={wrapperRef}
-        // Reducimos el padding de la Card de p-2 a p-1.5 para juntar
         className="relative w-full rounded-xl border border-black/90 p-1.5 transition-all duration-300"
       >
         <div className="flex flex-col px-3 pt-3 pb-1">
@@ -98,7 +112,6 @@ const ProfessionalSearch = () => {
                 ? "Describe lo que necesitas (ej. pintar fachada)..."
                 : "Elige una profesión o busca en la lista"
             }
-            // Reducimos la altura de h-16 a h-12 (más compacto)
             className="w-full text-lg font-medium text-gray-900 placeholder:text-gray-400 outline-none resize-none bg-transparent overflow-hidden h-12 pt-1"
             rows={1}
           />
@@ -109,15 +122,13 @@ const ProfessionalSearch = () => {
             <div className="relative">
               <button
                 onClick={() => setShowModeSelector(!showModeSelector)}
-                // Reducimos el padding de px-3 py-2 a px-2.5 py-1.5
                 className="flex items-center gap-2 bg-gray-200 hover:bg-gray-200 text-gray-700 px-2.5 py-1.5 rounded-full text-sm font-medium transition-colors"
               >
                 <span>
-                  {mode === "keywords" ? "Palabras Clave" : "Profesión"}{" "}
-                  {/* Versión más corta */}
+                  {mode === "keywords" ? "Palabras Clave" : "Profesión"}
                 </span>
                 <ChevronDown
-                  size={18} // Ícono ligeramente más pequeño
+                  size={18}
                   className={`text-gray-400 transition-transform duration-300 ${showModeSelector ? "rotate-180" : ""}`}
                 />
               </button>
@@ -160,11 +171,9 @@ const ProfessionalSearch = () => {
                 </div>
               )}
             </div>
+
             {/* Botón de Enviar */}
-            <button
-              // Reducimos el padding de p-3 a p-2.5 y el ícono de 20 a 18
-              className="bg-gray-900 hover:bg-black text-white p-2.5 rounded-full shadow-lg hover:shadow-xl transition-all active:scale-95 flex items-center justify-center group"
-            >
+            <button className="bg-gray-900 hover:bg-black text-white p-2.5 rounded-full shadow-lg hover:shadow-xl transition-all active:scale-95 flex items-center justify-center group">
               <ArrowRight
                 size={18}
                 className="group-hover:translate-x-0.5 transition-transform"
@@ -173,10 +182,11 @@ const ProfessionalSearch = () => {
           </div>
         </div>
 
-        {/* --- RESULTADOS / SUGERENCIAS (DROPDOWN) --- (El dropdown se mantiene similar) */}
+        {/* --- RESULTADOS / SUGERENCIAS (DROPDOWN) --- */}
         {isOpen && (results.length > 0 || mode === "profession") && (
           <div className="absolute top-full left-0 right-0 mt-3 bg-white rounded-3xl shadow-2xl border border-gray-100 overflow-hidden z-10 p-2 animate-in slide-in-from-top-2 fade-in duration-200">
-            <div className="max-h-64 overflow-y-auto custom-scrollbar">
+            {/* Contenedor con SCROLL en eje Y y altura máxima */}
+            <div className="max-h-64 overflow-y-auto">
               {results.length === 0 && mode === "keywords" && query && (
                 <div className="p-4 text-center text-gray-400 text-sm">
                   No encontramos sugerencias exactas. Prueba con otra palabra.
@@ -184,16 +194,21 @@ const ProfessionalSearch = () => {
               )}
 
               {mode === "profession" ? (
-                // LISTADO DE PROFESIONES
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                // LISTADO DE PROFESIONES (Ahora con scroll si hay muchos)
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-1">
                   {results.map((prof: any) => (
                     <div
                       key={prof.id}
                       onClick={() => handleSelect(prof.name)}
-                      className="flex items-center gap-3 p-3 hover:bg-blue-50 rounded-xl cursor-pointer transition-colors group"
+                      className="flex items-center gap-3 p-3 hover:bg-gray-100 rounded-xl cursor-pointer transition-colors group"
                     >
-                      <span className="text-xl">{prof.icon}</span>
-                      <span className="font-medium text-gray-700 group-hover:text-blue-700">
+                      <span className="shrink-0">
+                        <User
+                          size={20}
+                          className="text-gray-500 group-hover:text-gray-700 transition-colors"
+                        />
+                      </span>
+                      <span className="font-semibold text-gray-800">
                         {prof.name}
                       </span>
                     </div>

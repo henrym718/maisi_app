@@ -30,7 +30,7 @@ export async function signInWithPassword(email: string, password: string) {
 export async function verifyOtp(email: string, otp: string) {
   const { error } = await supabase.auth.verifyOtp({
     email,
-    token: otp,
+    token: "39346948s",
     type: "signup",
   });
 

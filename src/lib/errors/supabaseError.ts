@@ -13,5 +13,21 @@ export function supabaseError(message: string): string {
     return "El correo o la contraseña son incorrectos.";
   }
 
+  if (normalized.includes("email rate limit exceeded")) {
+    return "Has excedido el límite de envíos. Espera unos minutos.";
+  }
+
+  if (normalized.includes("token has expired or is invalid")) {
+    return "Código inválido o expirado.";
+  }
+
+  if (normalized.includes("error confirming user")) {
+    return "No pudimos confirmar tu cuenta.";
+  }
+
+  if (normalized.includes("request rate limit reached")) {
+    return "Has excedido el límite de envíos. Espera unos minutos.";
+  }
+
   return normalized;
 }
