@@ -41,7 +41,7 @@ const SUGERENCIAS_TAGS = [
 
 type SearchMode = "keywords" | "profession";
 
-const ProfessionalSearch = () => {
+const TalentSearchInput: React.FC = () => {
   const [mode, setMode] = useState<SearchMode>("keywords"); // 'keywords' | 'profession'
   const [query, setQuery] = useState("");
   const [isOpen, setIsOpen] = useState(false);
@@ -255,4 +255,4 @@ const ProfessionalSearch = () => {
   );
 };
 
-export default ProfessionalSearch;
+export default TalentSearchInput;

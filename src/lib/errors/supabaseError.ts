@@ -29,5 +29,13 @@ export function supabaseError(message: string): string {
     return "Has excedido el límite de envíos. Espera unos minutos.";
   }
 
+  if (
+    normalized.includes(
+      "for security purposes, you can only request this after"
+    )
+  ) {
+    return "Intenta de nuevo en unos minutos.";
+  }
+
   return normalized;
 }
