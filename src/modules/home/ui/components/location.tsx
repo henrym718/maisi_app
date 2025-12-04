@@ -13,7 +13,6 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
-import { Card, CardContent } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
 
 // --- DATA: CIUDADES ---
@@ -148,26 +147,25 @@ export default function CitySelector() {
         </div>
 
         {/* 3. CARDS DE CIUDADES (Usando Card de Shadcn) */}
+        {/* 3. CARDS DE CIUDADES (GRID DINÁMICO) */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6">
           {ciudadesParaMostrar.map((city) => {
             const isSelected = selectedCities.includes(city.id);
             return (
-              <Card
+              <div
                 key={city.id}
                 onClick={() => toggleCitySelection(city.id)}
                 className={`
-                  cursor-pointer transition-all duration-200 relative
+                  flex items-center justify-center cursor-pointer rounded-xl p-4 text-center font-semibold text-sm transition-all duration-200 border relative overflow-hidden whitespace-nowrap text-ellipsis
                   ${
                     isSelected
-                      ? "border-2 border-black bg-gray-100 shadow-inner" // Seleccionado: Borde negro, fondo gris
-                      : "hover:border-gray-400"
+                      ? "border-black bg-gray-100 shadow-inner"
+                      : "border-gray-200 bg-white hover:border-gray-400"
                   }
                 `}
               >
-                <CardContent className="text-center font-semibold text-sm">
-                  {city.name}
-                </CardContent>
-              </Card>
+                {city.name}
+              </div>
             );
           })}
         </div>
@@ -182,7 +180,7 @@ export default function CitySelector() {
             </DialogTrigger>
 
             {/* --- MODAL (Usando DialogContent) --- */}
-            <DialogContent className="p-0 border-none sm:max-w-lg max-h-[70vh] flex flex-col overflow-hidden">
+            <DialogContent className="p-0 border-none sm:max-w-lg h-[70vh] flex flex-col overflow-hidden">
               <DialogHeader className="p-4 border-b shrink-0">
                 <DialogTitle>Seleccionar ciudades</DialogTitle>
               </DialogHeader>
