@@ -1,7 +1,7 @@
 "use client";
 
-import TalentLocationView from "@/modules/home/ui/view/talent-location-view";
-import TalentSearchView from "@/modules/home/ui/view/talent-search-view";
+import TalentLocationView from "@/modules/find/ui/views/talent-location-view";
+import TalentSearchView from "@/modules/find/ui/views/talent-search-view";
 import { useState } from "react";
 
 type WizardStep = 1 | 2;

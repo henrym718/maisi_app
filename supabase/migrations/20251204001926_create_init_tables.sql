@@ -38,6 +38,7 @@ CREATE TABLE public.profiles{
     is_onboarded boolean NOT NULL DEFAULT false,    
     is_talent boolean NOT NULL DEFAULT false,
     is_client boolean NOT NULL DEFAULT false,
+    last_online timestamp without time zone,
     
     created_at timestamp without time zone DEFAULT now(),
     updated_at timestamp without time zone DEFAULT now(),
@@ -77,7 +78,7 @@ CREATE TABLE public.talents{
     is_draft boolean NOT NULL DEFAULT true,
     is_top_talent boolean NOT NULL DEFAULT false,
     is_featured boolean NOT NULL DEFAULT false,
-    last_online timestamp without time zone,
+  
    
     -- FAQ y METADATOS
     faqs jsonb[],

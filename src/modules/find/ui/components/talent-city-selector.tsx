@@ -37,7 +37,7 @@ const TODAS_LAS_CIUDADES = [
   { id: "c_tul", name: "Tulcán" },
 ];
 
-export default function CitySelector() {
+export default function TalentCitySelector() {
   const [selectedCities, setSelectedCities] = useState<string[]>([]);
   const [anyCity, setAnyCity] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);

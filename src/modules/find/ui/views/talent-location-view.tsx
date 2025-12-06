@@ -1,8 +1,4 @@
-import { Button } from "@/components/ui/button";
-import TalentLocationSelector from "../components/talent-location-selector";
-import { ArrowRightIcon } from "lucide-react";
-import Link from "next/link";
-import CitySelector from "../components/location";
+import CitySelector from "../components/talent-city-selector";
 
 export default function TalentLocationView() {
   return (
