@@ -246,24 +246,16 @@ const HeroMinimalSearch: React.FC = () => {
                   }
                 }}
                 placeholder="Busca por Nombre, Especialidad o Servicio..."
-                className="w-full text-lg font-medium text-gray-900 placeholder:text-gray-400 outline-none bg-transparent"
+                className="w-full text-base font-medium text-gray-900 outline-none bg-transparent placeholder:text-base"
               />
 
-              {query && (
-                <button
-                  onClick={handleClear}
-                  className="p-1 text-gray-400 hover:text-gray-700 rounded-full transition-colors shrink-0 ml-2"
-                >
-                  <X size={20} />
-                </button>
-              )}
               <ChevronDown size={22} className="text-gray-500 mx-3 shrink-0" />
             </div>
           </div>
 
           {/* 💥 --- DROPDOWN DE RESULTADOS DE BÚSQUEDA (ESTILO PESTAÑAS) --- 💥 */}
           {showResultsDropdown && (
-            <div className="absolute top-[calc(100%+10px)] left-0 right-0 bg-white rounded-xl shadow-lg border border-gray-200 overflow-hidden z-20 p-3 animate-in slide-in-from-top-2 fade-in duration-200">
+            <div className="absolute top-[calc(100%+10px)] left-0 right-0 bg-white rounded-xl shadow-lg border border-gray-200 overflow-hidden z-20 px-3 animate-in slide-in-from-top-2 fade-in duration-200">
               {/* FILTROS / PESTAÑAS (Solo visibles si hay query o es estado popular) */}
               {(query.length > 0 || isPopularSearchState) && (
                 <div className="border-b border-gray-100 px-1 py-2 flex items-center justify-start text-sm gap-4 overflow-x-auto whitespace-nowrap mb-3">
@@ -298,7 +290,7 @@ const HeroMinimalSearch: React.FC = () => {
                 </div>
               )}
 
-              <div className="max-h-80 overflow-y-auto">
+              <div className="max-h-60 overflow-y-auto">
                 {/* 1. MUESTRA ESTADO DE NO RESULTADOS */}
                 {query.length > 0 && !hasResults && (
                   <NoResultsState query={query} filter={selectedFilter} />
@@ -359,19 +351,6 @@ const HeroMinimalSearch: React.FC = () => {
                   </>
                 )}
               </div>
-
-              {/* 🚀 FOOTER DE BÚSQUEDA COMPLETA (Solo si hay query Y resultados) */}
-              {showSearchFooter && (
-                <div className="border-t border-gray-100 pt-3 px-3">
-                  <button
-                    onClick={() => handleSearchSubmit()}
-                    className="w-full hover:bg-black/5 font-semibold py-2 rounded-lg flex items-center justify-center gap-2 transition-colors text-sm text-gray-800"
-                  >
-                    Buscar todos los resultados para **"{query}"**
-                    <ChevronRight size={16} />
-                  </button>
-                </div>
-              )}
             </div>
           )}
         </div>

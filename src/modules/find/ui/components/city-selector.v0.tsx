@@ -84,10 +84,56 @@ export default function CitySelectorClean({
     }
   };
 
+  // --- LÓGICA DE FILTRADO Y ORDENAMIENTO (Corregida) ---
   const filtered = useMemo(() => {
     const q = search.toLowerCase();
-    return CITIES.filter((c) => c.toLowerCase().includes(q));
-  }, [search]);
+
+    // 1. Aplicar filtro de búsqueda si existe
+    const searchFiltered = CITIES.filter((c) => c.toLowerCase().includes(q));
+
+    if (q) {
+      // Si hay búsqueda, se muestra el resultado filtrado sin orden especial
+      return searchFiltered;
+    }
+
+    // 2. Si no hay búsqueda, aplicar orden por selección CONFIRMADA (estado `selected`)
+
+    // Ciudades seleccionadas (confirmadas al presionar Continuar)
+    const confirmedSelected = selected.filter((c) => c !== "Todo Ecuador");
+
+    // Ciudades no seleccionadas (que no están en la lista confirmada, excluyendo 'Todo Ecuador')
+    const notSelected = searchFiltered.filter(
+      (c) => c !== "Todo Ecuador" && !confirmedSelected.includes(c)
+    );
+
+    // 3. Reconstruir la lista ordenada
+    let orderedList = [];
+
+    // Siempre "Todo Ecuador" al principio
+    if (CITIES.includes("Todo Ecuador")) {
+      orderedList.push("Todo Ecuador");
+    }
+
+    // Luego las seleccionadas confirmadas (en el orden en que fueron seleccionadas)
+    // Usamos el array `selected` para mantener el orden original de selección si es posible.
+    // Aunque el orden exacto de `selected` no está garantizado para reflejar siempre el orden de clic,
+    // se ordena en base a si *están* seleccionadas.
+
+    // Ordenamos las ciudades seleccionadas confirmadas según su posición en `CITIES` para mantener un orden consistente al abrir.
+    const orderedConfirmed = confirmedSelected.sort(
+      (a, b) => CITIES.indexOf(a) - CITIES.indexOf(b)
+    );
+
+    orderedList.push(...orderedConfirmed);
+
+    // Finalmente, el resto de ciudades no seleccionadas
+    orderedList.push(...notSelected);
+
+    // Nota: El uso de `selected` como dependencia en `useMemo` asegura que la lista se reordene
+    // **solamente** después de que `handleContinue` actualice el estado `selected`.
+    return orderedList;
+  }, [search, selected]); // Cambiada la dependencia a `selected` (la selección confirmada)
+  // ------------------------------------------------------------------
 
   const showBadges = !selected.includes("Todo Ecuador");
 
@@ -225,7 +271,7 @@ export default function CitySelectorClean({
 
       {/* Botón final */}
       <button
-        className="w-full mt-5 py-3 rounded-xl bg-black text-white font-bold text-lg hover:bg-gray-800"
+        className="w-full mt-5 py-3 rounded-xl bg-teal-500 text-white font-bold text-lg hover:bg-gray-800"
         onClick={() => onApply?.(selected)}
       >
         Continuar

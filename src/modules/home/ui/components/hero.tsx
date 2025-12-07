@@ -17,7 +17,7 @@ export default function Hero() {
             asChild
             className="mt-10 h-14 px-20! rounded-sm bg-primary-foreground hover:bg-primary-foreground/90 text-white "
           >
-            <Link href="/talent-search">
+            <Link href="/get-started">
               <span className="font-sans">Busca un talento</span>
               <ArrowRightIcon />
             </Link>
