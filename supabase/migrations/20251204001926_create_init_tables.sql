@@ -3,18 +3,19 @@ CREATE TYPE public.modality AS ENUM (
     'remote',
     'hybrid'
 );
+
 CREATE TYPE public.transaction_type AS ENUM (
     -- Ingresos
     'PURCHASE',         -- Compra de coins (por T o C)
     'INITIAL_GIFT',     -- Regalo inicial al crear cuenta (T o C)    
     'REFUND',           -- Devolución de coins (T o C) si una oferta es cancelada y hay aplicaciones
     'MONTHLY_GIFT',     -- Regalo mensual recurrente (Solo C)
-    
-    -- Egresos (Fees/Gastos)
+        -- Egresos (Fees/Gastos)
     'APPLICATION_FEE',  -- Gasto del Talento por aplicar a trabajos
     'FEATURED_FEE',     -- Gasto del Talento por promoción
     'CONTACT_FEE'       -- Gasto del Cliente por contacto directo
 );
+
 CREATE TYPE public.transaction_status AS ENUM (
     'pending', 
     'completed', 
@@ -60,6 +61,15 @@ CREATE TABLE public.talents{
     cover_image_url text NOT NULL,  
     intro_video_url text NOT NULL,
  
+
+ -- POLÍTICA COMERCIAL Y DISPONIBILIDAD
+    reference_price text, -- Texto libre (ej: "Desde $40" o "A convenir").
+    visit_cost text, -- Texto libre (ej: "Visita $15 (deducible)" o "Presupuesto Gratis").
+    service_hours text, -- Texto simple (ej: "Lun-Sab 8:00 - 18:00").
+    handles_emergencies boolean NOT NULL DEFAULT false, -- Campo booleano para filtrar rápidamente.
+    warranty_description text, -- Texto libre (ej: "30 días en mano de obra").
+
+
  -- PRUEBA SOCIAL / REPUTACIÓN
     rating numeric(2, 1) NOT NULL DEFAULT 0.0,   
     total_reviews integer NOT NULL DEFAULT 0,    

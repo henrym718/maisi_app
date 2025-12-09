@@ -15,6 +15,7 @@ import {
   ArrowDown,
   ChevronDown, // Usaremos este para Servicios / Búsquedas Populares
 } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 // --- DATA SIMULADA (MANTENIDA) ---
 const PROFESIONES_LIST = [
@@ -223,10 +224,15 @@ const HeroMinimalSearch: React.FC = () => {
         <div ref={wrapperRef} className="relative">
           {/* --- BARRA DE BÚSQUEDA MINIMALISTA --- */}
           <div
-            className={`
-              w-full bg-white border border-gray-300 rounded-lg shadow
-              transition-all duration-200 z-30 relative flex items-center py-2 pl-4
-            `}
+            className={cn(
+              "w-full border shadow hover:border-black transition-all duration-200 z-30 relative flex items-center py-2 pl-4",
+              showResultsDropdown
+                ? "rounded-t-xl rounded-b-none"
+                : "rounded-xl",
+              isFocused
+                ? "bg-white hover:border-black/10"
+                : "bg-black/4 border-gray-300"
+            )}
           >
             {/* 1. Input de Búsqueda */}
             <div className="flex items-center flex-1 p-1">
@@ -255,7 +261,16 @@ const HeroMinimalSearch: React.FC = () => {
 
           {/* 💥 --- DROPDOWN DE RESULTADOS DE BÚSQUEDA (ESTILO PESTAÑAS) --- 💥 */}
           {showResultsDropdown && (
-            <div className="absolute top-[calc(100%+10px)] left-0 right-0 bg-white rounded-xl shadow-lg border border-gray-200 overflow-hidden z-20 px-3 animate-in slide-in-from-top-2 fade-in duration-200">
+            <div
+              className={`
+          absolute top-full left-0 right-0 bg-white shadow-lg border border-gray-200 overflow-hidden z-20 px-3
+          ${
+            showResultsDropdown
+              ? "rounded-b-lg rounded-t-none border-t-0"
+              : "rounded-xl"
+          }
+  `}
+            >
               {/* FILTROS / PESTAÑAS (Solo visibles si hay query o es estado popular) */}
               {(query.length > 0 || isPopularSearchState) && (
                 <div className="border-b border-gray-100 px-1 py-2 flex items-center justify-start text-sm gap-4 overflow-x-auto whitespace-nowrap mb-3">

@@ -51,7 +51,7 @@ export default function TalentSearchView({ setStep }: Props) {
 
           {/* 4. BOTÓN DE ACCIÓN (CTA) */}
           <Button
-            className="w-full h-12 text-base font-semibold rounded-xl shadow-md hover:shadow-lg transition-all"
+            className="w-full h-12 text-base font-semibold rounded-md border border-black shadow-md hover:shadow-lg transition-all"
             onClick={() => setStep(2)}
           >
             Buscar
