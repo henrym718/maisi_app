@@ -1,4 +1,5 @@
 import React from "react";
+import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import {
@@ -91,13 +92,15 @@ const TalentOnboardingIntro = () => {
 
             {/* BOTÓN DE ACCIÓN (Oculto en móvil) */}
             <div className="pt-4 hidden lg:block">
-              <Button
-                size="lg"
-                className="h-14 px-10 text-lg bg-teal-500 hover:bg-teal-600 text-white w-full md:w-auto shadow-lg shadow-teal-500/20 group transition-all"
-              >
-                Configurar mi perfil ahora{" "}
-                <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
-              </Button>
+              <Link href="/onboarding-talent/wizard">
+                <Button
+                  size="lg"
+                  className="h-14 px-10 text-lg bg-teal-500 hover:bg-teal-600 text-white w-full md:w-auto shadow-lg shadow-teal-500/20 group transition-all"
+                >
+                  Configurar mi perfil ahora{" "}
+                  <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
+                </Button>
+              </Link>
               <p className="text-xs text-gray-400 mt-3 text-left">
                 Registro gratuito. Sin comisiones por contratación.
               </p>
@@ -282,12 +285,14 @@ const TalentOnboardingIntro = () => {
           </p>
 
           <div className="flex flex-col items-center justify-center gap-4">
-            <Button
-              size="lg"
-              className="h-14 px-12 text-lg bg-white text-teal-900 hover:bg-gray-100 font-bold w-full sm:w-auto shadow-xl transition-transform hover:-translate-y-1"
-            >
-              Completar mi perfil ahora
-            </Button>
+            <Link href="/onboarding-talent/wizard">
+              <Button
+                size="lg"
+                className="h-14 px-12 text-lg bg-white text-teal-900 hover:bg-gray-100 font-bold w-full sm:w-auto shadow-xl transition-transform hover:-translate-y-1"
+              >
+                Completar mi perfil ahora
+              </Button>
+            </Link>
             <p className="text-sm text-teal-400/80 mt-4 flex items-center gap-2">
               <ShieldCheck size={16} /> Tus datos personales están seguros.
             </p>
